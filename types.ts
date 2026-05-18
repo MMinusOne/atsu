@@ -12,16 +12,18 @@ export interface SearchResponse {
   page: number;
   out_of: number;
   hits: {
-    englishTitle: string;
-    id: string;
-    isAdult: boolean;
-    poster: string;
-    posterMedium: string;
-    posterSmall: string;
-    status: Status;
-    title: string;
-    type: MangaType;
-    year: number;
+    document: {
+      englishTitle: string;
+      id: string;
+      isAdult: boolean;
+      poster: string;
+      posterMedium: string;
+      posterSmall: string;
+      status: Status;
+      title: string;
+      type: MangaType;
+      year: number;
+    };
   }[];
 }
 
@@ -40,42 +42,44 @@ export interface GetInfoOptions {
 }
 
 export interface GetInfoResponse {
-  id: string;
-  released: number;
-  scanlators: Scanlator[];
-  views: string;
-  authors: Author[];
-  banner: {
-    url: string;
-    aspectRatio: number;
-  };
-  genras: Genra[];
-  englishTitle: string;
-  isAdult: boolean;
-  poster: {
+  mangaPage: {
     id: string;
-    image: string;
-    smallImage: string;
-    mediumImage: string;
-    largeImage: string;
+    released: number;
+    scanlators: Scanlator[];
+    views: string;
+    authors: Author[];
+    banner: {
+      url: string;
+      aspectRatio: number;
+    };
+    genras: Genra[];
+    englishTitle: string;
+    isAdult: boolean;
+    poster: {
+      id: string;
+      image: string;
+      smallImage: string;
+      mediumImage: string;
+      largeImage: string;
+    };
+    title: string;
+    type: MangaType;
+    otherNames: string[];
+    synopsis: string;
+    anilistId?: string;
+    apId?: string;
+    kitsuId?: string;
+    annId?: string;
+    mangaBakaId?: string;
+    malId?: string;
+    mangaUpdatesId: string;
+    status: Status;
+    avgRating: number;
+    commentSectionId: string;
+    totalChapterCount: number;
+    hasMoreChapters: boolean;
+    chapters: Chapter[];
   };
-  title: string;
-  type: MangaType;
-  otherNames: string[];
-  synopsis: string;
-  anilistId?: string;
-  apId?: string;
-  kitsuId?: string;
-  annId?: string;
-  mangaBakaId?: string;
-  malId?: string;
-  mangaUpdatesId: string;
-  status: Status;
-  avgRating: number;
-  commentSectionId: string;
-  totalChapterCount: number;
-  hasMoreChapters: boolean;
-  chapters: Chapter[];
 }
 
 export interface Scanlator {

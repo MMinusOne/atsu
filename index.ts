@@ -33,10 +33,7 @@ export class Atsu {
     const url = new URL(`/collections/manga/documents/search`, this.baseUrl);
 
     url.searchParams.set("q", searchOptions.query);
-    url.searchParams.set(
-      "query_by",
-      "id,title,englishTitle,otherNames,authors",
-    );
+    url.searchParams.set("query_by", "title,englishTitle,otherNames,authors");
     url.searchParams.set("query_by_weights", "4,3,2,1");
     url.searchParams.set("num_typos", "4,3,2,1");
     url.searchParams.set(
@@ -76,7 +73,7 @@ export class Atsu {
       .get<GetChapterPanelsResponse>(url)
       .then((r) => r.json());
 
-    return response;
+    return response.readChapter;
   }
 
   async getPageBuffer(
