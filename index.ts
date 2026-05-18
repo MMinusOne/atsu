@@ -1,6 +1,14 @@
 import ky from "ky";
 import { type KyInstance } from "ky";
-import { type SearchResponse, type SearchOptions } from "./types";
+import {
+  type SearchResponse,
+  type SearchOptions,
+  type GetChapterPanelsOptions,
+  type GetInfoOptions,
+  type GetInfoResponse,
+  type GetChapterPanelsResponse,
+  type GetChapterBufferOptions,
+} from "./types";
 
 export class Atsu {
   private readonly api: KyInstance;
@@ -21,14 +29,14 @@ export class Atsu {
     });
   }
 
-  async search(searchOptions: SearchOptions) {
-    const url = new URL(
-      `${this.baseUrl}/collections/manga/documents/search`,
-      this.baseUrl,
-    );
+  async search(searchOptions: SearchOptions): Promise<SearchResponse> {
+    const url = new URL(`/collections/manga/documents/search`, this.baseUrl);
 
     url.searchParams.set("q", searchOptions.query);
-    url.searchParams.set("query_by", "title,englishTitle,otherNames,authors");
+    url.searchParams.set(
+      "query_by",
+      "id,title,englishTitle,otherNames,authors",
+    );
     url.searchParams.set("query_by_weights", "4,3,2,1");
     url.searchParams.set("num_typos", "4,3,2,1");
     url.searchParams.set(
@@ -42,6 +50,41 @@ export class Atsu {
     const response = await this.api
       .get<SearchResponse>(url)
       .then((r) => r.json());
+
+    return response;
+  }
+
+  async getInfo(getInfoOptions: GetInfoOptions): Promise<GetInfoResponse> {
+    const url = new URL(`/api/manga/page`, this.baseUrl);
+
+    url.searchParams.set("id", getInfoOptions.id);
+
+    const response = await this.api
+      .get<GetInfoResponse>(url)
+      .then((r) => r.json());
+
+    return response;
+  }
+
+  async getChapterPanels(getChapterPanelsOptions: GetChapterPanelsOptions) {
+    const url = new URL(`https://atsu.moe/api/read/chapter`, this.baseUrl);
+
+    url.searchParams.set("mangaId", getChapterPanelsOptions.mangaId);
+    url.searchParams.set("chapterId", getChapterPanelsOptions.chapterId);
+
+    const response = await this.api
+      .get<GetChapterPanelsResponse>(url)
+      .then((r) => r.json());
+
+    return response;
+  }
+
+  async getPageBuffer(
+    getChapterBufferOptions: GetChapterBufferOptions,
+  ): Promise<Uint8Array> {
+    const url = new URL(getChapterBufferOptions.image, this.baseUrl);
+
+    const response = await this.api.get(url).then((r) => r.bytes());
 
     return response;
   }
