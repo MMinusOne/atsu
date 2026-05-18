@@ -11,9 +11,6 @@ export class Atsu {
     readonly proxyUrl?: string,
   ) {
     this.api = ky.create({
-      baseUrl: this.proxyUrl
-        ? `${this.proxyUrl}?url=${this.baseUrl}`
-        : this.baseUrl,
       referrer: this.baseUrl,
 
       retry: {
@@ -25,7 +22,10 @@ export class Atsu {
   }
 
   async search(searchOptions: SearchOptions) {
-    const url = new URL("/collections/manga/documents/search", this.baseUrl);
+    const url = new URL(
+      `${this.baseUrl}/collections/manga/documents/search`,
+      this.baseUrl,
+    );
 
     url.searchParams.set("q", searchOptions.query);
     url.searchParams.set("query_by", "title,englishTitle,otherNames,authors");
@@ -40,7 +40,7 @@ export class Atsu {
     url.searchParams.set("per_page", String(searchOptions.perPage ?? 40));
 
     const response = await this.api
-      .get<SearchResponse>(url.pathname + url.searchParams)
+      .get<SearchResponse>(url)
       .then((r) => r.json());
 
     return response;
