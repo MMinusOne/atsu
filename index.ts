@@ -17,14 +17,16 @@ export class Atsu {
     readonly baseUrl: string = "https://atsu.moe",
     readonly retryLimit: number = 3,
     readonly proxyUrl?: string,
+    readonly timeout: number = 10_000,
+    readonly backOffLimit = 3_000,
   ) {
     this.api = ky.create({
       referrer: this.baseUrl,
-
+      timeout: this.timeout,
       retry: {
         limit: this.retryLimit,
         methods: ["get", "post"],
-        backoffLimit: 3000,
+        backoffLimit: this.backOffLimit,
       },
     });
   }
