@@ -142,3 +142,11 @@ export interface Page {
 export interface GetChapterBufferOptions {
   image: string;
 }
+
+export interface GetAllChaptersInfo {
+  mangaId: string;
+}
+
+export interface GetAllChaptersResponse {
+  chapters: Chapter[];
+}

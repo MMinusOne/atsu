@@ -8,6 +8,8 @@ import {
   type GetInfoResponse,
   type GetChapterPanelsResponse,
   type GetChapterBufferOptions,
+  type GetAllChaptersResponse,
+  type GetAllChaptersInfo,
 } from "./types";
 
 export class Atsu {
@@ -53,6 +55,20 @@ export class Atsu {
     return response;
   }
 
+  async getAllChapters(
+    getAllChaptersOptions: GetAllChaptersInfo,
+  ): Promise<GetAllChaptersResponse> {
+    const url = new URL(`/api/manga/allChapters`, this.baseUrl);
+
+    url.searchParams.set("mangaId", getAllChaptersOptions.mangaId);
+
+    const response = await this.api
+      .get<GetAllChaptersResponse>(url)
+      .then((r) => r.json());
+
+    return response;
+  }
+
   async getInfo(getInfoOptions: GetInfoOptions): Promise<GetInfoResponse> {
     const url = new URL(`/api/manga/page`, this.baseUrl);
 
@@ -66,7 +82,7 @@ export class Atsu {
   }
 
   async getChapterPanels(getChapterPanelsOptions: GetChapterPanelsOptions) {
-    const url = new URL(`https://atsu.moe/api/read/chapter`, this.baseUrl);
+    const url = new URL(`/api/read/chapter`, this.baseUrl);
 
     url.searchParams.set("mangaId", getChapterPanelsOptions.mangaId);
     url.searchParams.set("chapterId", getChapterPanelsOptions.chapterId);
